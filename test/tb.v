@@ -29,7 +29,14 @@ module tb ();
 
   // Replace tt_um_example with your module name:
   tt_um_example user_project (
-
+     /*.clk(clk),
+     .rst_n(rst_n),
+     .ena(ena);
+     .ui_in(ui_in);
+     .uio_in(uio_in);
+     .uo_out(uo_out);
+     .uio_out(uio_out);
+     .uio_oe(uio_oe);*/
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
       .VPWR(VPWR),
@@ -45,5 +52,46 @@ module tb ();
       .clk    (clk),      // clock
       .rst_n  (rst_n)     // not reset
   );
+
+   //Clock
+  always #50 clk = ~clk;
+
+  initial begin
+    // Initializes signals
+    clk = 0;
+    rst_n = 0;
+    ena = 0;
+    ui_in = 0;
+    uio_in = 0;
+
+    // Reset 
+    #100;
+    rst_n = 1;
+    #100;
+    ena = 1;      // Enable the design
+
+    // Test 1: Addition
+    // Adds 10 to the accumulator
+    ui_in = 8'd10; 
+    #100;
+     
+    // Test Case 2: Accumulate 5 several times
+    ui_in = 8'd5;
+    repeat (4) #100; // Adds 5, four times (Total should be 10 + 20 = 30)
+
+    // Test Case 3: carries bit over
+     // 30 + 230 = 260
+    ui_in = 8'd230;
+    #100;
+
+    // Test Case 4: Observe uio_out (High Byte)
+    // Add 255 ten times to see the high byte increment quickly
+    ui_in = 8'd255;
+    repeat (10) #100;
+
+    #100;
+    $display("Test Finished. Final Sum (Hex): %h%h", uio_out, uo_out);
+    $finish;
+  end
 
 endmodule
