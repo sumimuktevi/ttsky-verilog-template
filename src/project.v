@@ -22,10 +22,10 @@ module tt_um_example (
   assign uio_oe  = 8'b1111_1111; // all of them are outputs because we need the higher bits of the accumalator  
 
     reg [15:0] accumalator; 
-    assign [7:0] uo_out  = accumalator[7:0];
+    assign uo_out  = accumalator[7:0];
     assign uio_out = accumalator[15:8];
     
-    always (@posedge clk | @negedge rst_n) begin
+    always (@posedge clk or @negedge rst_n) begin
         if (!rst_n) begin 
             accumalator <= 16'd0;
         end else if (ena) begin 
