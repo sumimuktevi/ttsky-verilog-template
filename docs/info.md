@@ -9,12 +9,12 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+This is a simple vector accumulator 
 
 ## How to test
 
-Explain how to use your project
+I just tested it with GitHub because I used a Cocotb test. I did not make a Verilog one, so Python should run the test makefile just fine. 
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+I used GenAI for the Testing because I ended up having a lot of bugs and I had to edit the Makefile as well. 
