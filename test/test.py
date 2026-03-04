@@ -5,7 +5,6 @@ import os
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
-from cocotb_test.simulator import run
 
 @cocotb.test()
 async def test_project(dut):
@@ -52,15 +51,5 @@ async def test_project(dut):
     # Checks that top bits are being used
     assert int(dut.uio_out.value) > 0
     dut._log.info("Tests passed")
-
-# THIS PART IS CRITICAL: It tells the runner where your Verilog is
-def test_runner():
-    run(
-        verilog_sources=[os.path.abspath("../src/project.v")],
-        toplevel="tt_um_example",
-        module="test",
-        simulator="icarus"
-    )
-
 
 
