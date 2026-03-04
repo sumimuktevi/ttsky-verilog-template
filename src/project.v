@@ -25,7 +25,7 @@ module tt_um_example (
     assign uo_out  = accumalator[7:0];
     assign uio_out = accumalator[15:8];
     
-    always (@posedge clk | @negedge rst_n) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin 
             accumalator <= 16'd0;
         end else if (ena) begin 
