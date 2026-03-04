@@ -54,9 +54,9 @@ module tb ();
   );
 
    //Clock
-  always #50 clk = ~clk;
+ // always #50 clk = ~clk;
 
-  initial begin
+  //initial begin
     // Initializes signals
     clk = 0;
     rst_n = 0;
@@ -92,6 +92,6 @@ module tb ();
     #100;
     $display("Test Finished. Final Sum (Hex): %h%h", uio_out, uo_out);
     $finish;
-  end
+  //end
 
 endmodule
