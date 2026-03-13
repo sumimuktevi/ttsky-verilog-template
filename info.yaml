@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      Accumalator
-  author:       ""      Sumedha Muktevi
-  discord:      ""      sumi_muktevi
-  description:  ""      Simple 16 bit single vector counter
+  title:        "Accumalator"      
+  author:       "Sumedha Muktevi"
+  discord:      "NA"
+  description:  "Simple 16 bit single vector counter"
   language:     "Verilog"
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
