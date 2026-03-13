@@ -16,41 +16,41 @@ async def test_project(dut):
     clock = Clock(dut.clk, 10, unit="us")
     cocotb.start_soon(clock.start())
 
-    # Reset
+   # Reset
     dut._log.info("Resetting...")
     dut.ena.value = 1
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 10)
+    
+    # Release reset on a FALLING edge so the 
+    # hardware sees a stable '1' on the next rising edge
+    await FallingEdge(dut.clk)
     dut.rst_n.value = 1
     await ClockCycles(dut.clk, 1)
 
-    # 3. Test Addition
-# 3. Test Addition
+    # Test Addition
     add_value = 10
     iterations = 5
     
-    # Drive the value BEFORE the loop starts
-    dut.ui_in.value = add_value
-
-    dut._log.info(f"Adding {add_value} to accumalator {iterations} times")
-
     for i in range(1, iterations + 1):
-        # 1. Wait for the clock to trigger the hardware
-        await ClockCycles(dut.clk, 1)
+        await FallingEdge(dut.clk)
+        dut.ui_in.value = add_value
         
-        # 2. Wait for a tiny amount of time for gates to settle 
-        # (ReadOnly is good, but sometimes a small delay helps in GL)
-        await ReadOnly() 
+        await RisingEdge(dut.clk)
+        await ReadOnly() # Wait for gate propagation
         
-        # 3. Read the values
-        # Use .integer to avoid issues with cocotb handles
-        low_byte = dut.uo_out.value.integer
-        high_byte = dut.uio_out.value.integer
-        current_total = (high_byte << 8) | low_byte
-        
-        expected_total = add_value * i
-    
-        dut._log.info(f"Cycle {i}: Expected {expected_total}, Got {current_total}")
-        assert current_total == expected_total
+        # Check if values are 'X' before converting
+        if dut.uo_out.value.is_resolvable:
+            low_byte = dut.uo_out.value.to_unsigned()
+            high_byte = dut.uio_out.value.to_unsigned()
+            current_total = (high_byte << 8) | low_byte
+            
+            expected_total = add_value * i
+            dut._log.info(f"Cycle {i}: Expected {expected_total}, Got {current_total}")
+            assert current_total == expected_total
+        else:
+            # This will help you see the 'X' in the logs instead of crashing
+            dut._log.error(f"Cycle {i}: Output is indeterminate! {dut.uo_out.value}")
+            assert False
