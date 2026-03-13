@@ -33,12 +33,12 @@ async def test_project(dut):
 
     dut._log.info(f"Adding {add_value} to accumulator {iterations} times")
 
-for i in range(1, iterations + 1):
-    await ClockCycles(dut.clk, 1)
-    await ReadOnly()  # Wait for signals to settle after the clock edge
+    for i in range(1, iterations + 1):
+        await ClockCycles(dut.clk, 1)
+        await ReadOnly()  # Wait for signals to settle after the clock edge
     
-    current_total = (int(dut.uio_out.value) << 8) | int(dut.uo_out.value)
-    expected_total = add_value * i
+        current_total = (int(dut.uio_out.value) << 8) | int(dut.uo_out.value)
+        expected_total = add_value * i
     
-    dut._log.info(f"Cycle {i}: Expected {expected_total}, Got {current_total}")
-    assert current_total == expected_total
+        dut._log.info(f"Cycle {i}: Expected {expected_total}, Got {current_total}")
+        assert current_total == expected_total
