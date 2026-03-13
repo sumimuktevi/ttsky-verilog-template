@@ -29,7 +29,7 @@ module tt_um_example (
         if (!rst_n) begin 
             accumalator <= 16'd0;
         end else if (ena) begin 
-            accumalator <= ui_in + accumalator;
+            accumalator <= {8'b0,ui_in} + accumalator;
         end 
     end 
         
