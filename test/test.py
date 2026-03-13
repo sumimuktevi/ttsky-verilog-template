@@ -33,7 +33,7 @@ async def test_project(dut):
 
     for i in range(1, iterations + 1):
         await ClockCycles(dut.clk, 1)
-        //await ClockCycles(dut.clk, 1) 
+        #await ClockCycles(dut.clk, 1) 
         
         # Combine uio_out (high byte) and uo_out (low byte) to get 16-bit total
         current_total = (int(dut.uio_out.value) << 8) | int(dut.uo_out.value)
